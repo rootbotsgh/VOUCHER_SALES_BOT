@@ -1,0 +1,33 @@
+
+services:
+  flask-fastapi-app:
+    build:
+      context: ./checker
+    container_name: flask_fastapi_app
+    expose:
+      - "5000"  # Flask (or FastAPI) running on port 5000
+      - "8000"  # FastAPI running on port 8000
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}   # Using an environment variable for ngrok token
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"  # Expose Nginx on port 80
+    depends_on:
+      - flask-fastapi-app
+
+  ngrok:
+    image: wernight/ngrok   # Official ngrok image
+    container_name: ngrok
+    ports:
+      - "4040:4040"  # Expose ngrok's web interface
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}  # Ngrok authtoken for authentication
+      NGROK_SUBDOMAIN: quality-indirectly-pig  # Custom subdomain
+    command: ngrok http -subdomain=${NGROK_SUBDOMAIN} nginx:80  # Tunnel traffic from Nginx
+    depends_on:
+      - nginx
+

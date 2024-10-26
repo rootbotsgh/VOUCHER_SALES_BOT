@@ -1,0 +1,7 @@
+tunnels:
+  flask:
+    addr: 5000  # The port for Flask
+    proto: http
+  fastapi:
+    addr: 8000  # The port for FastAPI
+    proto: http
