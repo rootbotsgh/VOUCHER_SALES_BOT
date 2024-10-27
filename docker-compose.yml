@@ -1,4 +1,3 @@
-
 services:
   flask-fastapi-app:
     build:
