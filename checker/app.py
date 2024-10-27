@@ -59,7 +59,7 @@ async def process_webhook(request: Request):
 # Start bot
 def run_telegram_bot():
     import uvicorn
-    uvicorn.run(fastapi_app, host="localhost", port=8000)
+    uvicorn.run(fastapi_app, host="127.0.0.1", port=8000)
 
 if __name__ == '__main__':
     # Start Flask app in a separate thread
