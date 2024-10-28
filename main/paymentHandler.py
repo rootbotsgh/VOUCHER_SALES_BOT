@@ -1,7 +1,7 @@
 import requests
 from sqliteHandler import sqlite3
 import uuid
-from config import bot, PAYSTACK_SECRET_KEY, OWNER_ID
+from config import bot, PAYSTACK_SECRET_KEY, OWNER_ID, currency
 
 #PAYSTACK FOR PAYMENTS
 
@@ -19,7 +19,7 @@ def generate_paystack_payment_link(amount, email, user_id):
         "email": email,
         "amount": amount * 100,
         "reference": f"txn_{user_id}_{random_uuid}",  # Paystack expects amounts in kobo (Naira) or pesewas (Ghana)
-        "currency": "GHS"  # Change to "GHS" if you are in Ghana
+        "currency": currency  # Change to "GHS" if you are in Ghana
     }
 
     response = requests.post(url, json=data, headers=headers)

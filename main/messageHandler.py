@@ -63,7 +63,7 @@ def start(message):
 def Back(message):
     unroute(message)
 
-
+# Inline keyboard to initiate card purchase
 @bot.message_handler(func=lambda message: message.text == "Purchase Checker PIN")
 def purchase(message):
     user_id = str(message.chat.id)
@@ -100,7 +100,9 @@ def request_withdraw(message):
 @bot.message_handler(func=lambda message: message.text == "View Purchased PINs")
 def request_withdraw(message):
     user_id = str(message.chat.id)
-    keyboard = list_create_keyboard(['CSSPS','WASSCE','Back'])
+    keys = cards
+    keys.append('Back')
+    keyboard = list_create_keyboard([keys,'Back'])
     bot.send_message(user_id, 'Please Choose type', reply_markup=keyboard)
     enroute()
     bot.register_next_step_handler(message, collect_cards)
@@ -155,7 +157,7 @@ def handle_withdrawal(message):
         amount = float(message.text)
         
         # Ensure that the amount is above $5
-        if amount < 5:
+        if amount < minimum_for_withdrawal:
             bot.reply_to(message, "Withdrawal amounts must be at least GHS5.0")
             return
 
@@ -185,9 +187,10 @@ def handle_withdrawal(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     db = call.data
-    if db == cards[0]:
-        bot.send_message(call.message.chat.id, "SHS PLACEMENT IS FREE")
-    elif db == cards[1]:
+    if db in cards:
+        if db == 'CSSPS':
+            bot.send_message(call.message.chat.id, "CSSPS is free. Just head to the portal")
+            return
         temp.clear()
         temp.append(db)
         # Call the secondary function when the callback data is "trigger"
@@ -211,13 +214,8 @@ def enter_name(message):
 
 def add_tag(message):
     txt = message.text
-    if txt != "" or txt != "Back":
-        if len(temp)>2:
-            temp[:2]
-        if temp[0] == cards[0]:
-            price =  12
-        elif temp[0] == cards[1]:
-            price ==19
+    if txt in cards or txt != "Back":
+        price = cards_to_price[txt]
         txt = txt.strip()
         temp.append(txt)
         start_payment(message, temp, price, temp[0])

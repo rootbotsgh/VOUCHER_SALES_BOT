@@ -1,5 +1,22 @@
 import sqlite3
+from config import cards
 
+for card in cards:
+    with sqlite3.connect(f"{card}.db") as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS cards (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            serial TEXT,
+            pin TEXT,
+            user_id INTEGER,  -- NULL or 0 means the card is unassigned
+            tag_name TEXT,
+            email TEXT
+            )
+        """)
+        conn.commit()
+        
 conn = sqlite3.connect('users.db')
 cursor = conn.cursor()
 
@@ -35,22 +52,6 @@ CREATE TABLE IF NOT EXISTS withdrawals (
 conn.commit()
 conn.close()
 
-
-conn = sqlite3.connect("WASSCE.db")
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS cards (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    serial TEXT,
-    pin TEXT,
-    user_id INTEGER,  -- NULL or 0 means the card is unassigned
-    tag_name TEXT,
-    email TEXT
-    )
-""")
-conn.commit()
-conn.close()
 
 def assign_card(db_name, user_id, tag_name, email):
     try:

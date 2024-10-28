@@ -16,3 +16,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 
 #VOUCHERS ON SALE
 cards = ["CSSPS", "WASSCE"]
+cards_to_price = {'CSSPS': 12, 'WASSCE':19}
+minimum_for_withdrawal = 5
+reward_per_reff = 0.5
+currency = "GHS"

@@ -27,7 +27,7 @@ def paystack_webhook():
         referrer_id = get_referrer_id(user_id)
         if referrer_id is not None:
             try:
-                reward_amount = 0.50  # Example reward
+                reward_amount = reward_per_reff  # Example reward
                 add_earnings(referrer_id, reward_amount)
                 # Notify the referrer
                 bot.send_message(referrer_id, f"You've earned a reward of GHS{reward_amount} for referring a user who made a purchase!")
@@ -61,4 +61,12 @@ def run_telegram_bot():
     import uvicorn
     uvicorn.run(fastapi_app, host="127.0.0.1", port=8000)
 
+'''
+if __name__ == '__main__':
+    # Start Flask app in a separate thread
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.start()
 
+    # Start FastAPI app (Telegram bot webhook) in the main thread
+    run_telegram_bot()
+'''
