@@ -40,7 +40,7 @@ def paystack_webhook():
     return jsonify({"status": "ignored"}), 200
 
 def run_flask():
-    flask_app.run(host="0.0.0.0", port=5000)
+    flask_app.run(host="0.0.0.0")
 
 
 # FastAPI app for Telegram webhook
@@ -61,10 +61,4 @@ def run_telegram_bot():
     import uvicorn
     uvicorn.run(fastapi_app, host="127.0.0.1", port=8000)
 
-if __name__ == '__main__':
-    # Start Flask app in a separate thread
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.start()
 
-    # Start FastAPI app (Telegram bot webhook) in the main thread
-    run_telegram_bot()

@@ -1,13 +1,24 @@
+version: "3"
 services:
-  flask-fastapi-app:
+  flask-app:
     build:
       context: ./checker
-    container_name: flask_fastapi_app
-    expose:
-      - "5000"  # Flask (or FastAPI) running on port 5000
-      - "8000"  # FastAPI running on port 8000
+      dockerfile: Dockerfile.flask  # Use a separate Dockerfile for Flask
+    container_name: flask_app
+    ports:
+      - "5000:5000"  # Flask running on port 5000
     environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}   # Using an environment variable for ngrok token
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+
+  fastapi-app:
+    build:
+      context: ./checker
+      dockerfile: Dockerfile.telebot_fastapi  # Use a separate Dockerfile for FastAPI
+    container_name: telebot_fastapi_app
+    ports:
+      - "8000:8000"  # FastAPI running on port 8000
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
 
   nginx:
     build:

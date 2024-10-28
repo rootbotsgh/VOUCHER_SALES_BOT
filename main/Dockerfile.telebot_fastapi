@@ -1,0 +1,16 @@
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy app code
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose port 8000 for FastAPI app
+EXPOSE 8000
+
+# Command to run FastAPI app
+CMD ["python", "-c", "from app import run_telegram_bot; run_telegram_bot()"]

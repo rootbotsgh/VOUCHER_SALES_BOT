@@ -3,12 +3,8 @@ from sqliteHandler import sqlite3
 import uuid
 from config import bot, PAYSTACK_SECRET_KEY, OWNER_ID
 
-# Paystack secret key
+#PAYSTACK FOR PAYMENTS
 
-card = {
-    '19':'WASSCE',
-    '12':'CSSPS',
-    }
 # Function to generate Paystack payment link
 def generate_paystack_payment_link(amount, email, user_id):
     random_uuid = uuid.uuid4().hex  # Generates a random 32-character hex string
@@ -36,13 +32,13 @@ def generate_paystack_payment_link(amount, email, user_id):
         return None
 
 # Command to start payment
-def start_payment(message, temp, price):
+def start_payment(message, temp, price, card):
     chat_id = message.chat.id
     user_email = temp[1] # You should gather this from the user dynamically
     amount = price  # Amount in Naira (₦1000), change to any amount you want
     
     # Generate Paystack payment link
-    unassigned_cards = check_unassigned_cards(amount)
+    unassigned_cards = check_unassigned_cards(amount, card)
     if unassigned_cards:
         print("Unassigned cards found:")
 
@@ -54,14 +50,14 @@ def start_payment(message, temp, price):
         else:
             bot.send_message(chat_id, "There was an error generating the payment link.")
     else:
-        db = card[str(amount)]
+        db = card
         bot.send_message(chat_id, f"Currently out of {db} voucher stock\nWe apologise for the inconvenience")
         bot.send_message(OWNER_ID, f"OUT OF {db} VOUCHER STOCK" )
 
 # Assuming `cursor` is your SQLite cursor and `connection` is your SQLite connection
 
-def check_unassigned_cards(amount):
-    db = card[str(amount)]
+def check_unassigned_cards(amount, card):
+    db = card
     with sqlite3.connect(f'{db}.db') as conn:
         cursor = conn.cursor()
         cursor.execute("""

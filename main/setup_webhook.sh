@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Replace these with your actual values
-BOT_TOKEN="YOUR_BOT_TOKEN"
-NGROK_AUTHTOKEN="YOUR_NGROK_AUTH_TOKEN"
+BOT_TOKEN=$YOUR_BOT_TOKEN
+NGROK_AUTHTOKEN=$NGROK_AUTHTOKEN
 
 # Install ngrok
 wget https://bin.equinox.io/c/111111/ngrok-stable-linux-amd64.zip

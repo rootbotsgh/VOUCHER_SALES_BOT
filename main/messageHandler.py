@@ -69,8 +69,8 @@ def purchase(message):
     user_id = str(message.chat.id)
     # Create inline buttons with callback data
     markup = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton('CSSPS (SHS Placement)\nIS FREE', callback_data="CSSPS")
-    button2 = types.InlineKeyboardButton('WASSCE\nGHS19.00', callback_data="WASSCE")
+    button1 = types.InlineKeyboardButton('CSSPS (SHS Placement)\nIS FREE', callback_data=cards[0])
+    button2 = types.InlineKeyboardButton('WASSCE\nGHS19.00', callback_data=cards[1])
     button3 = types.InlineKeyboardButton('Back', callback_data="Back")
 
     markup.add(button1)
@@ -185,9 +185,9 @@ def handle_withdrawal(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
     db = call.data
-    if db == "CSSPS":
+    if db == cards[0]:
         bot.send_message(call.message.chat.id, "SHS PLACEMENT IS FREE")
-    elif db == "WASSCE":
+    elif db == cards[1]:
         temp.clear()
         temp.append(db)
         # Call the secondary function when the callback data is "trigger"
@@ -214,13 +214,13 @@ def add_tag(message):
     if txt != "" or txt != "Back":
         if len(temp)>2:
             temp[:2]
-        if temp[0] == "CSSPS":
+        if temp[0] == cards[0]:
             price =  12
-        elif temp[0] == "WASSCE":
+        elif temp[0] == cards[1]:
             price ==19
         txt = txt.strip()
         temp.append(txt)
-        start_payment(message, temp, price)
+        start_payment(message, temp, price, temp[0])
 
     else:
         keyboard = list_create_keyboard(['Back'])

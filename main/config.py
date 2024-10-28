@@ -14,5 +14,5 @@ OWNER = os.getenv('OWNER')
 app = FastAPI()
 bot = telebot.TeleBot(BOT_TOKEN)
 
-
-# Path to your batch file
+#VOUCHERS ON SALE
+cards = ["CSSPS", "WASSCE"]
