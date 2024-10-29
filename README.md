@@ -1,5 +1,7 @@
 # **Telegram Voucher Sales Bot**
 
+### Added MySQL Support 
+
 git clone:
 `git clone https://github.com/rootbotsgh/VOUCHER_SALES_BOT`
 
@@ -15,7 +17,7 @@ uncomment last block
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.start()`
 
-Using sqlite3, new voucher database is made for each card/voucher type in cards list
+Using MySQL, new voucher database is made for each card/voucher type in cards list
 
 
 ## Functionality
@@ -65,10 +67,10 @@ The bot uses Paystack for processing payments. It generates a payment link that 
 ## Project Structure
 Flask: Handles Paystack webhook for payment confirmation.
 FastAPI: Handles Telegram webhook for real-time interaction with the bot.
-SQLite: Stores voucher data, user details, and transaction history.
+MySQL: Stores voucher data, user details, and transaction history.
 
 ## Database Structure
-The bot uses SQLite to store users, transactions, vouchers, and withdrawals.
+The bot uses MySQL to store users, transactions, vouchers, and withdrawals.
 
 ### Users Table (users.db):
 Stores information about users, their referral status, and earnings.
