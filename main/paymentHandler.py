@@ -1,5 +1,5 @@
 import requests
-from MySQLHandler import *
+from MySQLHandler import create_connection
 import uuid
 from config import bot, PAYSTACK_SECRET_KEY, OWNER_ID, currency
 
