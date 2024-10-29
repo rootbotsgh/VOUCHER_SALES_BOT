@@ -1,4 +1,4 @@
-Telegram Voucher Sales Bot
+**Telegram Voucher Sales Bot**
 This project is a Telegram bot that facilitates the sale of vouchers such as CSSPS (SHS Placement) and WASSCE cards. The bot is integrated with Paystack for payment processing and includes a referral system that rewards users for referring others.
 
 to run on docker, run in bash
