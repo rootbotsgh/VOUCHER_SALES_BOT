@@ -1,5 +1,5 @@
 import requests
-from sqliteHandler import sqlite3
+from MySQLHandler import *
 import uuid
 from config import bot, PAYSTACK_SECRET_KEY, OWNER_ID, currency
 
@@ -54,21 +54,22 @@ def start_payment(message, temp, price, card):
         bot.send_message(chat_id, f"Currently out of {db} voucher stock\nWe apologise for the inconvenience")
         bot.send_message(OWNER_ID, f"OUT OF {db} VOUCHER STOCK" )
 
-# Assuming `cursor` is your SQLite cursor and `connection` is your SQLite connection
 
 def check_unassigned_cards(amount, card):
     db = card
-    with sqlite3.connect(f'{db}.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT *
-            FROM cards
-            WHERE user_id IS NULL OR user_id = 0
-        """)
+    conn = create_connection()
+    cursor = conn.cursor()
 
-        unassigned_cards = cursor.fetchnone()
-        return unassigned_cards
+    cursor.execute(f"""
+        SELECT *
+        FROM {db}_cards
+        WHERE user_id IS NULL OR user_id = 0
+        LIMIT %s
+    """, (amount,))
 
-# Usage
+    unassigned_cards = cursor.fetchall()  # Fetch all unassigned cards
+    conn.close()
+    return unassigned_cards
+
 
 
