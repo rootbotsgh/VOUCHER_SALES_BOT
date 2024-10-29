@@ -2,8 +2,9 @@
 
 ### Added MySQL Support 
 
-git clone:
-`git clone https://github.com/rootbotsgh/VOUCHER_SALES_BOT`
+To clone this branch:
+```git clone -b MySQL https://github.com/rootbotsgh/VOUCHER_SALES_BOT
+```
 
 This project is a Telegram bot that facilitates the sale of vouchers such as CSSPS (SHS Placement) and WASSCE cards. The bot is integrated with Paystack for payment processing and includes a referral system that rewards users for referring others.
 
