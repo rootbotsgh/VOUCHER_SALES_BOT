@@ -1,13 +1,5 @@
 import mysql.connector
-from config import cards
-
-# MySQL database connection details
-db_config = {
-    'host': 'your_host',
-    'user': 'your_user',
-    'password': 'your_password',
-    'database': 'your_database'
-}
+from config import cards, db_config
 
 # Function to create connection to MySQL database
 def create_connection():
