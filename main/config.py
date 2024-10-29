@@ -5,6 +5,13 @@ from dotenv import load_dotenv
 import os 
 load_dotenv()
 
+# MySQL database connection details
+db_config = {
+    'host': 'your_host',
+    'user': 'your_user',
+    'password': 'your_password',
+    'database': 'your_database'
+}
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 OWNER_ID = os.getenv("OWNER_ID")
