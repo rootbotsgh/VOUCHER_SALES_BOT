@@ -1,6 +1,6 @@
 from functions import *
 from config import *
-from sqliteHandler import *
+from MySQLHandler import *
 from obfuscator import *
 from paymentHandler import *
 from flask import Flask, request, jsonify
