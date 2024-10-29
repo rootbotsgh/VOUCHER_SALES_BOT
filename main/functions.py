@@ -1,24 +1,40 @@
 import os
 import json
 from config import *
-from sqliteHandler import *
+from MySQLHandler import *
 from telebot import types
-from telebot import types  # Assuming you're using pyTelegramBotAPI (TeleBot)
+from telebot import types  
 
-USER_JSON_FILE = 'users.json'
-
-# Function to load user IDs from JSON file
+# Assuming you're using pyTelegramBotAPI (TeleBot)
+# Function to load user IDs from the MySQL `users` table
 def load_users():
-    if os.path.exists(USER_JSON_FILE):
-        with open(USER_JSON_FILE, 'r') as f:
-            return json.load(f)
-    return []
+    conn = create_connection()
+    cursor = conn.cursor()
+    
+    # Select all user IDs from the users table
+    cursor.execute("SELECT telegram_id FROM users")
+    user_ids = [row[0] for row in cursor.fetchall()]  # Fetch all user IDs
+    
+    conn.close()
+    return user_ids
 
-# Function to save user IDs to JSON file
+# Function to save user IDs to the MySQL `users` table
+# This assumes that you're inserting new users
 def save_users(user_ids):
-    with open(USER_JSON_FILE, 'w') as f:
-        json.dump(user_ids, f)
+    conn = create_connection()
+    cursor = conn.cursor()
 
+    # Insert user IDs into the users table (you can adapt this based on your logic)
+    for user_id in user_ids:
+        cursor.execute("""
+            INSERT INTO users (telegram_id) 
+            VALUES (%s)
+            ON DUPLICATE KEY UPDATE telegram_id = telegram_id
+        """, (user_id,))
+
+    conn.commit()
+    conn.close()
+    
 
 
 def list_create_keyboard(options):
@@ -57,24 +73,34 @@ def extract_between_underscores(text):
     else:
         return None  
     
+
 # Function to deduct balance from a user
 def deduct_balance(user_id, amount):
-    with sqlite3.connect('users.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE users
-            SET earned_money = earned_money - ?
-            WHERE telegram_id = ? AND earned_money >= ?
-        """, (amount, user_id, amount))  # Ensures the balance is enough
-        conn.commit()
-        return cursor.rowcount > 0  # Returns True if balance was successfully deducted
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    # Ensure sufficient balance before deducting
+    cursor.execute("""
+        UPDATE users
+        SET earned_money = earned_money - %s
+        WHERE telegram_id = %s AND earned_money >= %s
+    """, (amount, user_id, amount))
+    
+    conn.commit()
+    success = cursor.rowcount > 0  # Check if a row was updated (successful deduction)
+    conn.close()
+    return success
 
 # Function to add a withdrawal request
 def add_withdrawal_request(user_id, amount):
-    with sqlite3.connect('users.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO withdrawals (user_id, amount)
-            VALUES (?, ?)
-        """, (user_id, amount))
-        conn.commit()
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO withdrawals (user_id, amount)
+        VALUES (%s, %s)
+    """, (user_id, amount))
+
+    conn.commit()
+    conn.close()
+    
