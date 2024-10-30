@@ -15,48 +15,47 @@ user_ids = load_users()
 #Mechanism to ensure user joins channel is poor
 #doesn't matter tho since bot is useless without channel
 # Command Handlers
+
 @bot.message_handler(commands=['start'])
-
 def start(message):
-
+    user_id = str(message.chat.id)  # Move user_id definition to the top
 
     def reff_check(message):
+        # Initialize user_ids if not defined
+        if 'user_ids' not in globals():
+            global user_ids
+            user_ids = load_users()  # Load users from your JSON file if needed
 
         # Check if user is already in the list
         if user_id not in user_ids:
             user_ids.append(user_id)  # Add new user to the list
             save_users(user_ids)  # Save updated list to JSON
         
-        # Check if the count of users is a multiple of 20
+            # Check if the count of users is a multiple of 20
             if len(user_ids) % 20 == 0:
                 bot.send_message(OWNER_ID, f"A new user has started the bot. Total users: {len(user_ids)}")
-
-
         else:
+            # User already exists
             pass
 
         # Check if there's a referral code (start param)
         if len(message.text.split()) > 1:
             referral_code = message.text.split()[1]
-
             referrer_id = deobfuscate_chat_id(referral_code)
             return referrer_id
         else:
-            return ""
-            # Save the referral in your database (new user -> referrer_chat_id)
-                
+            return None  # Return None if no referral code
+
     # Check if user exists, if not create a new one
-    reff = reff_check(message)
-    referrer_id = reff
-    user_id = str(message.chat.id)
-    enroute()
-    user = get_user_by_telegram_id(user_id)
+    referrer_id = reff_check(message)  # Get referrer ID
+    user = get_user_by_telegram_id(user_id)  # Check if user exists
     if not user:
-       create_user(user_id, referrer_id)
-    # Ensure user data is initialized
-    bot.send_message(user_id, f"Welcome {message.chat.first_name}!\nTo your No.1 Telegram Voucher Shop in Ghana\nNOTE: GES announces that CSSPS(SHS school placement) is free thid year!\nNo need for a checker!")
+        create_user(user_id, referrer_id)  # Create new user
+
+    # Send welcome message and main menu
+    bot.send_message(user_id, f"Welcome {message.chat.first_name}!\nTo your No.1 Telegram Voucher Shop in Ghana\nNOTE: GES announces that CSSPS (SHS school placement) is free this year!\nNo need for a checker!")
     send_main_menu(user_id)
-    
+
 
 #Back with message
 @bot.message_handler(func=lambda message: message.text == 'Back')
