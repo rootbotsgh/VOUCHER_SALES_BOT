@@ -185,25 +185,34 @@ def handle_withdrawal(message):
 # Callback query handler
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
-    db = call.data
+    db = call.data  # Get the callback data
+
+    # First check for 'Back' to avoid treating it as a card
+    if db == "Back":
+        Back(call.message)  # Call the Back function
+        return  # Exit the function after handling 'Back'
+
+    elif db == "reset":
+        Back(call.message)  # Call the Back function
+        if temp:  # Ensure temp is not empty before popping
+            temp.pop()  # Remove the last element in temp
+        return  # Exit the function after handling 'reset'
+
+    elif db == "confirm":
+        if not temp or len(temp) > 1:  # Check if temp is empty or has more than one item
+            return start(call.message)  # Restart the flow
+        enter_name(call.message)  # Call the function to enter the user's name
+
+    # Only check for cards after handling 'Back', 'reset', and 'confirm'
     if db in cards:
         if db == 'CSSPS':
+            # Sending a message when the user selects 'CSSPS'
             bot.send_message(call.message.chat.id, "CSSPS is free. Just head to the portal")
-            return
-        temp.clear()
-        temp.append(db)
-        # Call the secondary function when the callback data is "trigger"
-        handle_email(call.message)
-    elif db == "Back":
-        # Call the secondary function when the callback data is "trigger"
-        Back(call.message)
-    elif db == "reset":
-        Back(call.message)
-        temp.pop()
-    elif db == "confirm":
-        if temp == [] or len(temp) > 1:
-            return start(call.message)
-        enter_name(call.message)
+            return  # Exit the function after sending the message
+
+        temp.clear()  # Clear the temp list
+        temp.append(db)  # Add the selected card to temp
+        handle_email(call.message)  # Call the secondary function
 
 def enter_name(message):
     keyboard = list_create_keyboard(['Back'])
