@@ -81,7 +81,7 @@ def purchase(message):
 
 
 @bot.message_handler(func=lambda message: message.text == 'Withdraw')
-def function(message):
+def withdr_(message):
     user_id = str(message.chat.id)
     keyboard = list_create_keyboard(['Back'])
     bot.send_message(user_id, 'Enter amount to withdraw', reply_markup=keyboard)
@@ -90,18 +90,18 @@ def function(message):
 
 
 @bot.message_handler(func=lambda message: message.text == 'Portals')
-def request_withdraw(message):
+def portals(message):
     user_id = str(message.chat.id)
     keyboard = list_create_keyboard(['Back'])
     bot.send_message(user_id, 'SHS Placement:  https://cssps.gov.gh/\n\nWASSCE Results:  https://ghana.waecdirect.org/', reply_markup=keyboard)
     enroute()
 
 @bot.message_handler(func=lambda message: message.text == "View Purchased PINs")
-def request_withdraw(message):
+def view_pins(message):
     user_id = str(message.chat.id)
     keys = cards
     keys.append('Back')
-    keyboard = list_create_keyboard([keys,'Back'])
+    keyboard = list_create_keyboard(keys)
     bot.send_message(user_id, 'Please Choose type', reply_markup=keyboard)
     enroute()
     bot.register_next_step_handler(message, collect_cards)
@@ -121,27 +121,27 @@ def collect_cards(message):
     except:
         bot.send_message(user_id, 'Please use provided Keyboard Buttons in menu')
 @bot.message_handler(func=lambda message: message.text == "Referral Benefits")
-def request_withdraw(message):
+def reff_benefits(message):
     user_id = str(message.chat.id)
     keyboard = list_create_keyboard(['Referral Link', 'Withdraw', 'Back'])
     bot.send_message(user_id, 'Get GHS0.5 everytime your referree makes a purchase', reply_markup=keyboard)
     enroute
 
 @bot.message_handler(func=lambda message: message.text == 'Referral Link')
-def request_withdraw(message):
+def reff_link(message):
     user_id = str(message.chat.id)
     referral_code = obfuscate_chat_id(user_id)
     referral_link = f"You can share your referral link\n https://t.me/{BOT}?start={referral_code}"
     bot.send_message(user_id, referral_link)
 
 @bot.message_handler(func=lambda message: message.text == "Contact Support /\nReport Issue")
-def request_withdraw(message):
+def contact_sp(message):
     user_id = str(message.chat.id)
     bot.send_message(user_id, f'In case of any enquiry / issue\nContact the moderator @ https://t.me/{OWNER}')
     enroute
 
 @bot.message_handler(func=lambda message: message.text == "Visit our Website")
-def request_withdraw(message):
+def our_ws(message):
     user_id = str(message.chat.id)
     bot.send_message(user_id, 'Click on this <a href="https://rootbotsgh.github.io/">link here</a>\n to be redirected to our website \nOR\n https://rootbotsgh.github.io/ ', parse_mode='HTML')
     enroute
