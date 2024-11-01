@@ -7,10 +7,10 @@ load_dotenv()
 
 # MySQL database connection details
 db_config = {
-    'host': 'ramseyroot.mysql.database.azure.com',
-    'user': 'ramseyroot',
-    'password': 'Ph.@r0@h777',
-    'database': 'ramseyroot',
+    'host': '',
+    'user': '',
+    'password': '',
+    'database': '',
     'port': 3306
 }
 
