@@ -230,7 +230,7 @@ def save_address(message):
         temp.append(recipient_email)
         markup.add(button1)
         markup.add(button2)
-        bot.send_message(message.chat.id, f"Are you sure {recipient_email} is your email
+        bot.send_message(message.chat.id, f"Are you sure {recipient_email} is your email", keyboard = markup)
 
 
 def handle_email(message):
@@ -240,29 +240,31 @@ def handle_email(message):
     enroute()
 
 
-
 def unroute(message):
     # Use globals() to get the function by its name
     try:
-     if len(router) == 0:
-         globals()['start'](message)
-     else:
-        router.pop()
-        globals()[router[-1]](message)
-    except:
+        if len(router) == 0:
+            globals()['start'](message)  # If no previous route, go to start
+        else:
+            router.pop()  # Remove the last route from the stack
+            if len(router) > 0:
+                globals()[router[-1]](message)  # Go to the previous route
+            else:
+                globals()['start'](message)
+    except Exception as e:
+        print(f"Error in unroute: {e}")
         globals()['start'](message)
 
 
 def enroute():
     # Get the current call stack and return the name of the caller
-    func= inspect.stack()[1].function
-    if len(router) != 0:
-        if func == router[-1]:
-            return
+    func = inspect.stack()[1].function
+    if len(router) != 0 and func == router[-1]:
+        return
     router.append(func)
 
 
-#ADMIN KEYS
+# ADMIN KEYS
 
 @bot.message_handler(commands=['stock'])
 def handle_stock(message):
@@ -283,19 +285,18 @@ def handle_stock(message):
         bot.reply_to(message, "You are not authorized to use this command.")
 
 
-
 # Command handler for /addcards
 @bot.message_handler(commands=['addcards'])
 def add_cards_command(message):
     # Check if the user is the owner
     if str(message.chat.id) != OWNER_ID:
-        bot.reply_to(message, "Unauthorized access. Only the bot owner can use Command.")
+        bot.reply_to(message, "Unauthorized access. Only the bot owner can use this command.")
         return
 
     # Get the message text without the command
-    serial_pin_str_list = message.text[len("/addcards "):]
+    serial_pin_str_list = message.text[len("/addcards "):].strip()
 
-    if not serial_pin_str_list.strip():
+    if not serial_pin_str_list:
         bot.reply_to(message, "Please provide a list of serial and pin pairs separated by newlines.")
         return
 
@@ -306,7 +307,7 @@ def add_cards_command(message):
     except Exception as e:
         bot.reply_to(message, f"An error occurred: {e}")
 
-'''/addcards 123456789 ABCDEFGHIJKL
-987654321 MNOPQRSTUV
-555555555 ZYXWVUTSRQ
-'''
+# Example input format for /addcards:
+# /addcards 123456789 ABCDEFGHIJKL
+# 987654321 MNOPQRSTUV
+# 555555555 ZYXWVUTSRQ
