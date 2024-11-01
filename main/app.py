@@ -54,14 +54,15 @@ async def process_webhook(request: Request):
         bot.process_new_updates([update])
     except Exception as e:
         print(f"Error handling webhook: {e}")
-    return {"status": "OK"}
+    return
 
 # Start bot
 def run_telegram_bot():
     import uvicorn
     uvicorn.run(fastapi_app, host="127.0.0.1", port=8000)
 
-'''
+
+
 if __name__ == '__main__':
     # Start Flask app in a separate thread
     flask_thread = threading.Thread(target=run_flask)
@@ -69,4 +70,4 @@ if __name__ == '__main__':
 
     # Start FastAPI app (Telegram bot webhook) in the main thread
     run_telegram_bot()
-'''
+

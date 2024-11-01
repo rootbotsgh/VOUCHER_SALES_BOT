@@ -7,11 +7,10 @@ load_dotenv()
 
 # MySQL database connection details
 db_config = {
-    'host': 'ramseyroot.mysql.database.azure.com',
-    'user': 'ramseyroot',
-    'password': 'Ph.@r0@h777',
-    'database': 'ramseyroot',
-    'port': 3306
+    'host': '',
+    'user': 'your_user',
+    'password': 'your_password',
+    'database': 'your_database'
 }
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
