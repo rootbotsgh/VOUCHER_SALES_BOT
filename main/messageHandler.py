@@ -298,21 +298,33 @@ def add_cards_command(message):
         return
 
     # Get the message text without the command
-    serial_pin_str_list = message.text[len("/addcards "):].strip()
+    serial_pin_type = message.text[len("/addcards "):].strip()
+    temp.clear()
+    temp.append(serial_pin_type)
+    bot.send_message(message, """Enter card seials and pin in the order
+    qrkfkff difkg
+    didfkkk rogkg
+    (separated by newlines)""")
+    bot.register_next_step_handler(message, serial_pin)
 
     if not serial_pin_str_list:
         bot.reply_to(message, "Please provide a list of serial and pin pairs separated by newlines.")
         return
 
+
+def serial_pin(message):  
+    txt = message.text.strip()
     try:
         # Call the function to add the cards to the database
-        num_cards = add_cards(serial_pin_str_list)
-        bot.reply_to(message, f"{num_cards} cards added successfully.")
+        add_cards(txt, temp[0])
+        bot.reply_to(message, f"{temp[0]} cards added successfully.")
     except Exception as e:
         bot.reply_to(message, f"An error occurred: {e}")
         
         
-'''/addcards 123456789 ABCDEFGHIJKL
+'''/addcards Card_name
+then
+123456789 ABCDEFGHIJKL
 987654321 MNOPQRSTUV
 555555555 ZYXWVUTSRQ
 '''
