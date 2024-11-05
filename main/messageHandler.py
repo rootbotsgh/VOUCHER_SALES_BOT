@@ -180,7 +180,7 @@ def callback_handler(call):
         return
 
     elif db == "confirm":
-        if not temp or len(temp) > 1:  
+        if not temp or len(temp) == 2:  
             return start(call.message)
         enter_name(call.message)
 
