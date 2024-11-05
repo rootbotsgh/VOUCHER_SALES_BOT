@@ -198,7 +198,7 @@ def get_referrer_id(user_id):
     return None  # Return None if the user has no referrer
 
 # Function to add cards to the database
-def add_cards(serial_pin_str_list):
+def add_cards(serial_pin_str_list, card_name):
     conn = create_connection()
     cursor = conn.cursor()
 
@@ -208,8 +208,8 @@ def add_cards(serial_pin_str_list):
         serial, pin = serial_pin_str.split()
 
         # Insert the card into the 'cards' table
-        cursor.execute("""
-        INSERT INTO cards (serial, pin, user_id, tag_name, email) 
+        cursor.execute(f"""
+        INSERT INTO {card_name}_card (serial, pin, user_id, tag_name, email) 
         VALUES (%s, %s, NULL, NULL, NULL)
         """, (serial, pin))
 
